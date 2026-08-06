@@ -1,0 +1,36 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: fleet-db
+    environment:
+      POSTGRES_DB: fleetdb
+      POSTGRES_USER: fleetuser
+      POSTGRES_PASSWORD: fleetpass
+    ports:
+      - "5432:5432"
+    volumes:
+      - fleet-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fleetuser -d fleetdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    container_name: fleet-app
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: fleetdb
+      DB_USER: fleetuser
+      DB_PASSWORD: fleetpass
+      JWT_SECRET: local-dev-secret-change-in-production-min-32-characters
+    ports:
+      - "8080:8080"
+
+volumes:
+  fleet-db-data:
