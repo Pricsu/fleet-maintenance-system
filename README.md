@@ -4,7 +4,7 @@ A backend REST API for managing a vehicle fleet: vehicles, technicians, supplier
 
 There is no frontend. This is meant to be tested with curl/Postman or consumed by a client app. See the API reference below.
 
-Live demo: `http://<elastic ip>:8080`
+Live demo: `http://13.53.75.163:8080`
 
 ## What it does
 
